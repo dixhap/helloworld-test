@@ -1,34 +1,22 @@
-import unittest
+# test_app.py
+import pytest
 from app import app
 
-class HelloWorldTestCase(unittest.TestCase):
-    def setUp(self):
-        self.app = app.test_client()
-        self.app.testing = True
+@pytest.fixture
+def client():
+    with app.test_client() as client:
+        yield client
 
-    def test_evaluate_high(self):
-        response = self.app.post('/evaluate', json={'value': 150})
-        data = response.get_json()
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data['value'], 'high')
+def test_compare_number_high(client):
+    response = client.post('/compare', json={'number': 101})
+    assert response.status_code == 200
+    assert response.json == {'number': 101, 'result': 'high'}
 
-    def test_evaluate_low(self):
-        response = self.app.post('/evaluate', json={'value': 50})
-        data = response.get_json()
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data['value'], 'low')
-    
-    def test_evaluate_invalid_input(self):
-        response = self.app.post('/evaluate', json={'value': 'invalid'})
-        data = response.get_json()
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(data['error'], 'Invalid input')
+def test_compare_number_low(client):
+    response = client.post('/compare', json={'number': 99})
+    assert response.status_code == 200
+    assert response.json == {'number': 99, 'result': 'low'}
 
-    def test_evaluate_no_value(self):
-        response = self.app.post('/evaluate', json={})
-        data = response.get_json()
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(data['error'], 'Invalid input')
-
-if __name__ == '__main__':
-    unittest.main()
+def test_compare_number_invalid_input(client):
+    response = client.post('/compare', json={'number': 'abc'})
+    assert response.status_code == 400
