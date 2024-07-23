@@ -1,0 +1,30 @@
+# Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment files
+venv/
+env/
+*.env
+
+# IDE files
+.vscode/
+.pycharm/
+.idea/
+
+# Cache files
+__pycache__/
+.ipynb_checkpoints/
+
+# Log files
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Other files
+*.egg-info/
+*.egg
+*.whl
