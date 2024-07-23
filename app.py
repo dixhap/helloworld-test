@@ -3,14 +3,14 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-@app.route('/compare', methods=['POST'])
-def compare_number():
-    num = int(request.json['number'])
+@app.route('/hello', methods=['POST'])
+def hello_world():
+    num = int(request.json['num'])
     if num > 100:
-        result = 'high'
+        response = {'value': num, 'description': 'high'}
     else:
-        result = 'low'
-    return jsonify({'number': num, 'result': result})
+        response = {'value': num, 'description': 'low'}
+    return jsonify(response)
 
 if __name__ == '__main__':
     app.run(debug=True)
